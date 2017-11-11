@@ -13,3 +13,6 @@
 [submodule "vendor/bullet"]
 	path = vendor/bullet
 	url = https://github.com/bulletphysics/bullet3.git
+[submodule "vendor/imgui"]
+	path = vendor/imgui
+	url = https://github.com/ocornut/imgui.git
