@@ -4,6 +4,7 @@
 
 class MyApp : public App {
   void setup() override {}
+  std::string appName() const override { return "scaffold-test"; }
 };
 
 int main(int argc, char **argv) {

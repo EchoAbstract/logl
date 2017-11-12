@@ -42,7 +42,7 @@ void App::init(__attribute__((unused)) int argc,
   glViewport(0, 0, width, height);
 
   // print out some info about the graphics drivers
-  std::cout << "App loaded:" << std::endl;
+  std::cout << appName() << " loaded:" << std::endl;
   std::cout << "\tOpenGL version: " << glGetString(GL_VERSION) << std::endl;
   std::cout << "\tGLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION)
             << std::endl;

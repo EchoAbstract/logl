@@ -1,10 +1,13 @@
 #include "EventDispatcher.hh"
 
-void EventDispatcher::key(__attribute__((unused)) GLFWwindow *window,
-                          __attribute__((unused)) int key,
+void EventDispatcher::key(GLFWwindow *window, int key,
                           __attribute__((unused)) int scancode,
                           __attribute__((unused)) int action,
-                          __attribute__((unused)) int mods) {}
+                          __attribute__((unused)) int mods) {
+
+  if (key == GLFW_KEY_ESCAPE)
+    glfwSetWindowShouldClose(window, true);
+}
 
 void EventDispatcher::cursor(__attribute__((unused)) GLFWwindow *window,
                              __attribute__((unused)) double xpos,

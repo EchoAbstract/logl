@@ -20,6 +20,7 @@ protected:
   GLFWwindow *window_;
 
   virtual void setup() = 0;
+  virtual std::string appName() const { return "App"; }
 
   virtual void renderFrame(double atTime, int64_t frameNumber);
 
