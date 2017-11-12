@@ -12,6 +12,10 @@ void ErrorHandler(int code, const char *msg) {
 
 void App::configure(int argc, char **argv) { init(argc, argv); }
 
+// TODO (brian): Adjust size at init time
+// TODO (brian): Configure adjustable vs not adjustable size
+// TODO (brian): Add resize hook
+
 void App::init(__attribute__((unused)) int argc,
                __attribute__((unused)) char **argv) {
 
@@ -55,11 +59,20 @@ void App::init(__attribute__((unused)) int argc,
 void App::runMainLoop() {
   while (!glfwWindowShouldClose(window_)) {
     glfwPollEvents();
-    this->renderFrame(0.0, 1);
+    glClearColor(backgroundColor_.r(), backgroundColor_.g(),
+                 backgroundColor_.b(), backgroundColor_.a());
+    glClear(GL_COLOR_BUFFER_BIT);
+    renderFrame(glfwGetTime(), ++currentFrame_); // TODO (brian): I'd like to
+                                                 // rely on C++ timers here...
+    glfwSwapBuffers(window_);
   }
 }
 
 App::~App() { glfwTerminate(); }
 
-void App::renderFrame(__attribute__((unused)) double atTime,
-                      __attribute__((unused)) int64_t frameNumber) {}
+void App::renderFrame(__attribute__((unused)) Double atTime,
+                      __attribute__((unused)) U64 frameNumber) {}
+
+Color App::backgroundColor() const { return backgroundColor_; }
+
+void App::setBackgroundColor(Color color) { backgroundColor_ = color; }

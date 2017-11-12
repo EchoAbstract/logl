@@ -7,6 +7,9 @@
 #include <cstdint>
 #include <iostream>
 
+#include "Color.hh"
+#include "Types.hh"
+
 class App {
 
 public:
@@ -16,16 +19,23 @@ public:
 
   void runMainLoop();
 
+  Color backgroundColor() const;
+  void setBackgroundColor(Color color);
+
 protected:
   GLFWwindow *window_;
 
   virtual void setup() = 0;
   virtual std::string appName() const { return "App"; }
 
-  virtual void renderFrame(double atTime, int64_t frameNumber);
+  virtual void renderFrame(Double atTime, U64 frameNumber);
 
 private:
   void init(int argc, char **argv);
+
+  Color backgroundColor_;
+
+  U64 currentFrame_;
 };
 
 #endif
