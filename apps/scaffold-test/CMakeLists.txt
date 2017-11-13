@@ -19,8 +19,8 @@ set(PROJECT_SOURCES
 set(PROJECT_HEADERS)
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES} ${PROJECT_HEADERS}
-                               ${PROJECT_SHADERS} ${PROJECT_CONFIGS}
-                               ${VENDORS_SOURCES})
+                               ${PROJECT_SHADERS} ${PROJECT_CONFIGS})
+
 
 target_link_libraries(${PROJECT_NAME} assimp glfw
                       ${GLFW_LIBRARIES} ${GLAD_LIBRARIES}

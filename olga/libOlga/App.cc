@@ -22,9 +22,13 @@ void App::init(__attribute__((unused)) int argc,
   glfwSetErrorCallback(ErrorHandler);
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+#ifdef __APPLE__
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
+
   glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
   window_ = glfwCreateWindow(1024, 768, "logl", nullptr, nullptr);
   glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -41,7 +45,10 @@ void App::init(__attribute__((unused)) int argc,
   glfwMakeContextCurrent(window_);
   int width, height;
   glfwGetFramebufferSize(window_, &width, &height);
-  gladLoadGL();
+  if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+    std::cout << "Failed to initialize OpenGL context" << std::endl;
+    exit(-1);
+  }
 
   glViewport(0, 0, width, height);
 
