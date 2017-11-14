@@ -83,13 +83,19 @@ protected:
     glDeleteShader(vtxShader);
     glDeleteShader(fragShader);
 
+    GLuint vbo, ebo;
+
     glGenVertexArrays(1, &vao_);
-    glGenBuffers(1, &vbo_);
+    glGenBuffers(1, &vbo);
+    glGenBuffers(1, &ebo);
 
     glBindVertexArray(vao_);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 
-    glBufferData(GL_ARRAY_BUFFER, sizeof(triangle_), triangle_, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_), vertices_, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices_), indices_,
+                 GL_STATIC_DRAW);
 
     glUseProgram(program_);
 
@@ -98,32 +104,47 @@ protected:
 
     // This is disabled when the VAO is disabled
     glEnableVertexAttribArray(0);
+    glBindVertexArray(0);
 
     // These are not necessary due to VAO
-    // glBindBuffer(GL_ARRAY_BUFFER, 0);
-    // glUseProgram(0);
+    glDisableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glUseProgram(0);
 
     // Everyone must enable the VAO, so this is not really needed
-    glBindVertexArray(0);
   }
   std::string appName() const override { return "first-shader"; }
 
   void renderFrame(__attribute__((unused)) Double atTime,
                    __attribute__((unused)) U64 frameNumber) override {
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glUseProgram(program_);
     glBindVertexArray(vao_);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
     glUseProgram(0);
   }
 
 private:
-  GLuint vbo_;
   GLuint vao_;
   GLuint program_;
 
-  const Float triangle_[9] = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5f,
-                              0.0f,  0.0f,  0.5f, 0.0f};
+  // clang-format off
+  static constexpr Size vertex_count_ = 12;
+  const Float vertices_[vertex_count_] = {
+     0.5f,  0.5f, 0.0f, // top right
+     0.5f, -0.5f, 0.0f, // bottom right
+
+    -0.5f, -0.5f, 0.0f, // bottom left
+    -0.5f,  0.5f, 0.0f  // top left
+  };
+
+  const GLuint indices_[6] = {
+    0, 1, 3,
+    1, 2, 3
+  };
+  // clang-format off
+
 };
 
 int main(int argc, char **argv) {
