@@ -7,11 +7,15 @@
 const char *vertex = R"vertex(
 #version 410 core
 
-layout (location = 0) in vec3 aPos;
+layout (location = 0) in vec3 a_loc;
+layout (location = 1) in vec4 a_color;
+
+out vec4 v_color;
 
 void main()
 {
-    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+    gl_Position = vec4(a_loc, 1.0);
+    v_color = a_color;
 }
 )vertex";
 
@@ -20,14 +24,21 @@ const char *fragment = R"fragment(
 
 out vec4 FragColor;
 
-uniform vec4 u_color;
+in vec4 v_color;
 
 void main()
 {
-  FragColor = u_color;
+  FragColor = v_color;
 }
 
 )fragment";
+
+struct Vertex {
+  glm::vec3 loc;
+  glm::vec4 color;
+
+  Vertex(glm::vec3 l, glm::vec4 c) : loc(l), color(c) {}
+};
 
 class FirstShader : public App {
 protected:
@@ -104,11 +115,16 @@ protected:
 
     glUseProgram(program_);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(Float),
-                          (void *)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+                          (const void *)offsetof(Vertex, loc));
+
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+                          (const void *)offsetof(Vertex, color));
 
     // This is disabled when the VAO is disabled
     glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+
     glBindVertexArray(0);
 
     // These are not necessary due to VAO
@@ -137,18 +153,15 @@ private:
   Color c;
 
   // clang-format off
-  static constexpr Size vertex_count_ = 12;
-  const Float vertices_[vertex_count_] = {
-     0.5f,  0.5f, 0.0f, // top right
-     0.5f, -0.5f, 0.0f, // bottom right
-
-    -0.5f, -0.5f, 0.0f, // bottom left
-    -0.5f,  0.5f, 0.0f  // top left
+  static constexpr Size vertex_count_ = 3;
+  const Vertex vertices_[vertex_count_] = {
+    Vertex(glm::vec3( 0.5f, -0.5f, 0.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)),
+    Vertex(glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)),
+    Vertex(glm::vec3( 0.0f,  0.5f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f))
   };
 
-  const GLuint indices_[6] = {
-    0, 1, 3,
-    1, 2, 3
+  const GLuint indices_[3] = {
+    0, 1, 2
   };
   // clang-format off
 
