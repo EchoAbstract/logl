@@ -31,7 +31,7 @@ protected:
   void setup() override {
     // I haz a gl context here
 
-    setBackgroundColor(Color(0.2f, 0.3f, 0.3f, 1.0f));
+    setBackgroundColor({0.2f, 0.3f, 0.3f, 1.0f});
 
     // Compile shaders
     GLuint vtxShader = glCreateShader(GL_VERTEX_SHADER);

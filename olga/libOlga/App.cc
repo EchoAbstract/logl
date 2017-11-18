@@ -66,8 +66,8 @@ void App::init(__attribute__((unused)) int argc,
 void App::runMainLoop() {
   while (!glfwWindowShouldClose(window_)) {
     glfwPollEvents();
-    glClearColor(backgroundColor_.r(), backgroundColor_.g(),
-                 backgroundColor_.b(), backgroundColor_.a());
+    glClearColor(backgroundColor_.r, backgroundColor_.g, backgroundColor_.b,
+                 backgroundColor_.a);
     glClear(GL_COLOR_BUFFER_BIT);
     renderFrame(glfwGetTime(), ++currentFrame_); // TODO (brian): I'd like to
                                                  // rely on C++ timers here...

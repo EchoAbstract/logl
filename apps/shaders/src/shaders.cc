@@ -35,9 +35,9 @@ void main()
 
 struct Vertex {
   glm::vec3 loc;
-  glm::vec4 color;
+  Color c;
 
-  Vertex(glm::vec3 l, glm::vec4 c) : loc(l), color(c) {}
+  Vertex(glm::vec3 location, Color color) : loc(location), c(color) {}
 };
 
 class FirstShader : public App {
@@ -119,7 +119,7 @@ protected:
                           (const void *)offsetof(Vertex, loc));
 
     glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-                          (const void *)offsetof(Vertex, color));
+                          (const void *)offsetof(Vertex, c));
 
     // This is disabled when the VAO is disabled
     glEnableVertexAttribArray(0);
@@ -155,9 +155,9 @@ private:
   // clang-format off
   static constexpr Size vertex_count_ = 3;
   const Vertex vertices_[vertex_count_] = {
-    Vertex(glm::vec3( 0.5f, -0.5f, 0.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)),
-    Vertex(glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)),
-    Vertex(glm::vec3( 0.0f,  0.5f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f))
+    Vertex(glm::vec3( 0.5f, -0.5f, 0.0f), {1.0f, 0.0f, 0.0f}),
+    Vertex(glm::vec3(-0.5f, -0.5f, 0.0f), {0.0f, 1.0f, 0.0f}),
+    Vertex(glm::vec3( 0.0f,  0.5f, 0.0f), {0.0f, 0.0f, 1.0f})
   };
 
   const GLuint indices_[3] = {

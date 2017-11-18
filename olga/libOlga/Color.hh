@@ -4,38 +4,36 @@
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 
+#include <initializer_list>
+
 #include "Types.hh"
 
-// TODO (brian): Forward all the things
-class Color {
+// Value type, no hidden members
+struct Color {
 
-public:
+  Float r;
+  Float g;
+  Float b;
+  Float a;
+
+  // ctors
   Color();
-  Color(glm::vec3 color);
-  Color(glm::vec4 color);
+  Color(const glm::vec3 &color);
+  Color(const glm::vec4 &color);
   Color(Float r, Float g, Float b);
   Color(Float r, Float g, Float b, Float a);
+  Color(std::initializer_list<Float> l);
 
+  explicit Color(Float v);
+
+  Color &operator=(Float v);
+  Color &operator=(std::initializer_list<Float> l);
+  Color &operator=(const glm::vec3 &g);
+  Color &operator=(const glm::vec4 &g);
+
+  // GLM convenience functions
   glm::vec3 rgb() const;
   glm::vec4 rgba() const;
-
-  Float r() const;
-  Float g() const;
-  Float b() const;
-  Float a() const;
-
-  void setRed(Float r);
-  void setGreen(Float g);
-  void setBlue(Float b);
-  void setAlpha(Float a);
-
-  void setValue(glm::vec3 color);
-  void setValue(glm::vec4 color);
-  void setValue(Float r, Float g, Float b);
-  void setValue(Float r, Float g, Float b, Float a);
-
-private:
-  glm::vec4 baseColor_;
 };
 
 #endif
