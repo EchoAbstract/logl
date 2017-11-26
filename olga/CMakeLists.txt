@@ -10,9 +10,19 @@ include_directories(libOlga/)
 
 add_library(Olga SHARED
   ${VENDORS_SOURCES}
+
+  # Base Library
   libOlga/App.cc
   libOlga/Color.cc
-  libOlga/EventDispatcher.cc)
+  libOlga/EventDispatcher.cc
+  libOlga/Shader.cc
+
+  # Geometry
+  libOlga/geometry/Triangle.cc
+
+  # IO
+  libOlga/io/Utils.cc
+  )
 
 # Define headers for this library. PUBLIC headers are used for
 # compiling the library, and will be added to consumers' build
