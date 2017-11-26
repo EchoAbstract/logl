@@ -5,34 +5,8 @@
 #include <libOlga/Color.hh>
 #include <libOlga/Shader.hh>
 
-const char *vertex = R"vertex(
-#version 410 core
-
-layout (location = 0) in vec3 a_loc;
-layout (location = 1) in vec4 a_color;
-
-out vec4 v_color;
-
-void main()
-{
-    gl_Position = vec4(a_loc, 1.0);
-    v_color = a_color;
-}
-)vertex";
-
-const char *fragment = R"fragment(
-#version 410 core
-
-out vec4 FragColor;
-
-in vec4 v_color;
-
-void main()
-{
-  FragColor = v_color;
-}
-
-)fragment";
+static char *vertex_loc;
+static char *fragment_loc;
 
 struct Vertex {
   glm::vec3 loc;
@@ -48,7 +22,8 @@ protected:
 
     setBackgroundColor(Color(0.2f, 0.3f, 0.3f, 1.0f));
 
-    s.loadNewShaders(Shader::Source::String, vertex, fragment);
+    s.loadNewShaders(Shader::Source::File, vertex_loc, fragment_loc);
+    // s.loadNewShaders(Shader::Source::String, vertex, fragment);
 
     GLuint vbo, ebo;
 
@@ -64,7 +39,7 @@ protected:
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices_), indices_,
                  GL_STATIC_DRAW);
 
-    ScopedShader ss {s};
+    ScopedShader ss{s};
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
                           (const void *)offsetof(Vertex, loc));
@@ -89,7 +64,7 @@ protected:
 
   void renderFrame(Double atTime, U64 frameNumber) override {
     float green = (sin(atTime) / 2.0f) + 0.5f;
-    ScopedShader ss {s};
+    ScopedShader ss{s};
     s.setUniform("u_color", {0.001f * (frameNumber % 600), green, 1.0f, 1.0f});
     glBindVertexArray(vao_);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -118,6 +93,11 @@ private:
 };
 
 int main(int argc, char **argv) {
+
+  if (argc < 3) return -1;
+  vertex_loc = argv[1];
+  fragment_loc = argv[2];
+
   const std::unique_ptr<App> app = std::make_unique<FirstShader>();
   app->configure(argc, argv);
   app->runMainLoop();
